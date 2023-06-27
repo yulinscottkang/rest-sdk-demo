@@ -1,7 +1,7 @@
 import * as atlas from "azure-maps-control";
 import "azure-maps-control/dist/atlas.min.css";
 
-const onload = async () => {
+const onload = () => {
   // Initialize a map instance.
   const map = new atlas.Map("map", {
     view: "Auto",
@@ -15,7 +15,7 @@ const onload = async () => {
     }
   });
 
-  map.events.add("ready", async () => {
+  map.events.add("load", async () => {
     // Update the style of mouse cursor to a pointer
     map.getCanvasContainer().style.cursor = "pointer";
 

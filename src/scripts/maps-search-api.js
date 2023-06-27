@@ -15,7 +15,7 @@ const onload = () => {
     }
   });
 
-  map.events.add("ready", () => {
+  map.events.add("load", () => {
     // Create a data source and add it to the map.
     const datasource = new atlas.source.DataSource();
     map.sources.add(datasource);

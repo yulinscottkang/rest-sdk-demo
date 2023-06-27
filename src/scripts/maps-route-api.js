@@ -1,8 +1,8 @@
 import * as atlas from "azure-maps-control";
-import MapsRoute, { toColonDelimitedLatLonString } from "@azure-rest/maps-route";
+import MapsRoute from "@azure-rest/maps-route";
 import "azure-maps-control/dist/atlas.min.css";
 
-const onload = async () => {
+const onload = () => {
   // Initialize a map instance.
   const map = new atlas.Map("map", {
     view: "Auto",
@@ -16,7 +16,7 @@ const onload = async () => {
     }
   });
 
-  map.events.add("ready", async () => {
+  map.events.add("load", async () => {
     // Use the access token from the map and create an object that implements the TokenCredential interface.
     const credential = {
       getToken: () => {
