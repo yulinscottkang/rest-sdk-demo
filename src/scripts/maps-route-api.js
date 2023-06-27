@@ -1,5 +1,4 @@
 import * as atlas from "azure-maps-control";
-import MapsRoute from "@azure-rest/maps-route";
 import "azure-maps-control/dist/atlas.min.css";
 
 const onload = () => {
@@ -17,18 +16,6 @@ const onload = () => {
   });
 
   map.events.add("load", async () => {
-    // Use the access token from the map and create an object that implements the TokenCredential interface.
-    const credential = {
-      getToken: () => {
-        return {
-          token: map.authentication.getToken()
-        };
-      }
-    };
-
-    // Create a Route client.
-    const client = MapsRoute(credential, "6b603e52-a0de-41df-bfa2-464e262fa984");
-
     // Create a data source and add it to the map.
     const dataSource = new atlas.source.DataSource();
     map.sources.add(dataSource);
@@ -121,47 +108,6 @@ const onload = () => {
         });
       });
   });
-};
-
-/**
- * Helper function to convert a route response into a GeoJSON FeatureCollection.
- */
-const getFeatures = (routes) => {
-  const bounds = [];
-  const features = routes.map((route, index) => {
-    const multiLineCoords = route.legs.map((leg) => {
-      return leg.points.map((coord) => {
-        const position = [coord.longitude, coord.latitude];
-        bounds.push(position);
-        return position;
-      });
-    });
-
-    // Include all properties on the route object except legs.
-    // Legs is used to create the MultiLineString, so we only need the summaries.
-    // The legSummaries property replaces the legs property with just summary data.
-    const props = {
-      ...route,
-      legSummaries: route.legs.map((leg) => leg.summary),
-      resultIndex: index
-    };
-    delete props.legs;
-
-    return {
-      type: "Feature",
-      geometry: {
-        type: "MultiLineString",
-        coordinates: multiLineCoords
-      },
-      properties: props
-    };
-  });
-
-  return {
-    type: "FeatureCollection",
-    features: features,
-    bbox: new atlas.data.BoundingBox.fromLatLngs(bounds)
-  };
 };
 
 document.body.onload = onload;
